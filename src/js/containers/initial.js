@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 
 class InitialComponent extends Component{
+    changeRoute(){
+        this.props.history.push(`/${this.state.data}`);
+    }
     render() {
         return (
             <div className="container">
