@@ -7,18 +7,26 @@ class InitialComponent extends Component{
     render() {
         return (
             <div className="container">
-                <input type="text" placeholder="Whom you want to find?" />
-                <div>
-                    <label>
-                        <input type='checkbox' />
-                        <p>user</p>
-                    </label>
-                    <label>
-                        <input type='checkbox' />
-                        <p>organisation</p>
-                    </label>
-                </div>    
-                <button>Press me</button>
+                <form onSubmit = {this.handleSubmit.bind(this)}>
+                    <input 
+                        type="text" 
+                        required
+                        placeholder="Whom you want to find?"
+                        value = {this.state.data}
+                        onChange = {this.handleInputChange.bind(this)}
+                        />
+                    <div>
+                        <RadioButton val={"user"}
+                                    handleChange={this.handleRadioChanged.bind(this)}
+                                    isChecked = {this.state.checked === "user"}
+                        />
+                        <RadioButton val={"org"}
+                                    handleChange={this.handleRadioChanged.bind(this)}
+                                    isChecked = {this.state.checked === "org"}
+                        />
+                    </div>    
+                    <SubmitButton/>
+                </form>
             </div>
         )
     }
