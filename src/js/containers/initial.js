@@ -9,11 +9,12 @@ class InitialComponent extends Component{
         super(props);
         this.state = {
             checked: "user",
-            data: "",
-            response: null,
+            name: "",
+            repos: null,
             errors: null
         }
     }
+    
     handleRadioChanged(e){
         this.setState({
             checked: e.target.value
@@ -21,51 +22,59 @@ class InitialComponent extends Component{
     }
     handleInputChange(e){
         this.setState({
-            data: e.target.value
+            name: e.target.value
         })
     }
     changeRoute(){
-        this.props.history.push(`/${this.state.data}`);
+        this.props.history.push(`/${this.state.name}`);
     }
+
     handleSubmit(e){
+        console.log('submit')
         e.preventDefault();
-        this.url = `https://api.github.com/${this.state.checked}s/${this.state.data}`;
+        this.url = `https://api.github.com/${this.state.checked}s/${this.state.name}/repos`;
         request
             .send(this.url)
             .then(response => {
+    
                 this.setState({
-                    response
+                    repos: response
+                }, () => {
+                    this.saveDataToStore();
+                    this.changeRoute();   // WARNING setState on unmounted component !!
                 });
-                this.saveDataToStore();
-                this.changeRoute();
+                
             })
             .catch(err => {
+                console.error('err', err.message)
                 this.setState({
-                    errors : err
+                    errors: err.message
+                }, () => {
+                    this.saveDataToStore();
+                    // show error message
                 });
-                this.saveDataToStore();
             })
     }
     
-
     saveDataToStore(){
         for(let key in this.state){
             store.add(this.state[key], key)
         }
+        store.save();
     }
 
     render() {
         return (
-            <div className="container">
+            <div className="initial-container">
                 <form onSubmit = {this.handleSubmit.bind(this)}>
                     <input 
                         type="text" 
                         required
                         placeholder="Whom you want to find?"
-                        value = {this.state.data}
+                        value = {this.state.name}
                         onChange = {this.handleInputChange.bind(this)}
                         />
-                    <div>
+                    <div className='initial-radio-control'>
                         <RadioButton val={"user"}
                                     handleChange={this.handleRadioChanged.bind(this)}
                                     isChecked = {this.state.checked === "user"}
