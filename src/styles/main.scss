@@ -1,2 +1,29 @@
-@import url('./normalize.scss');
-@import url('./initial.scss');
+.main-container{
+    display: grid;
+    width: 100%;
+    height: 100%;
+    grid-template-areas: "sortings sortings"
+                        "filters cards";
+    grid-template-rows: 100px 1fr;
+    grid-template-columns: 300px 1fr;
+}
+.main-container .main-filters{
+    grid-area:filters;
+    background: yellow;
+}
+.main-container .main-sortings{
+    grid-area:sortings;
+    background: pink;
+}
+.main-container .main-cards{
+    grid-area:cards;
+}
+.main-container .main-cards{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap
+}
+.main-container .main-cards .main-card{
+    width: 49%;
+    border: 1px solid grey;
+}

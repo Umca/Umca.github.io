@@ -1,3 +1,14 @@
-body{
-    color: green;
+.initial-container {
+    width: 40%;
+    margin: 200px auto;
+    text-align: center
+}
+
+.initial-radio-control {
+    display: flex;
+    justify-content: center;
+}
+
+.initial-radio-control label {
+    padding: 10px;
 }
