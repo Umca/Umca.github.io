@@ -14,6 +14,9 @@ const store = {
             delete this.data[field];
             console.log(`${this.data[field]} is deleted successfully!`)
         }
+    },
+    save(){
+        localStorage.setItem('store', JSON.stringify(this.data))
     }
 };
 
