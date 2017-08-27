@@ -57,7 +57,8 @@ const webpackConfig = {
         port: 8081,
         historyApiFallback: true,
         hot: true,
-    }
+    },
+    devtool: 'sourcemap'
 }
 
 module.exports = webpackConfig;
