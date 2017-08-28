@@ -152,7 +152,7 @@ class Filters extends React.Component{
         e.preventDefault();
         console.info('filters applied');
         this.getFilterCondition();
-        store.add(this.state, 'filters')
+        //store.add(this.state, 'filters') not sure of needed
         this.filter();
         this.changeRoute();
         this.setState(this.cleanState);
@@ -174,6 +174,7 @@ class Filters extends React.Component{
                 }
             }
         console.log('condition', this.condition)
+        store.add(this.condition, 'filtercondition');
     }
     
     // get proper filter fns
