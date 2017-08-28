@@ -1,6 +1,8 @@
 import React from 'react';
 import store from '../utils/store';
 import Filters from './filters';
+import Sortings from './sortings';
+import Cards from './cards';
 import moment from 'moment';
 
 window.moment = moment;
@@ -25,24 +27,8 @@ export default class Main extends React.Component{
         return(
             <div className='main-container'>
                 <Filters repos = {this.state.repos}/>
-                
-                <div className="main-sortings">sortings</div>
-                <div className="main-cards">
-                    {
-                        this.state.repos.map( repo => {
-                            return (
-                                <div key={repo.id} className="main-card">
-                                    <p>Name {repo.name}</p>
-                                    <p>Description {repo.description}</p>
-                                    <p>Is fork {repo.fork}</p>
-                                    <p>Stars {repo.stargazers_count}</p>
-                                    <p>Last update {moment(repo.updated_at).format('lll')}</p>
-                                    <p>Language {repo.language}</p>
-                                </div>
-                            )
-                        })
-                    }
-                </div>
+                <Sortings />
+                <Cards repos = {this.state.repos}/>   
             </div>
         )
     }
