@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/Umca/Umca.github.io#readme",
   "dependencies": {
+    "event-emitter": "^0.3.5",
+    "events": "^1.1.1",
     "moment": "^2.18.1",
     "react": "^15.6.1",
     "react-datepicker": "^0.53.0",
