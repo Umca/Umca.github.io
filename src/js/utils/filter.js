@@ -1,81 +1,103 @@
-export default filter = {
+const filter = {
     fns:[],
-    configureFilterFns(state){
-        for (let key in state){
-            if(key == 'language'){
-                this.fns.push(
-                    {
-                        name: key,
-                        fn: function(repo){
-                            return repo[key] == state[key]
+    configureFilterFns(state) {
+        debugger;
+        let keys = Object.keys(state);
+        console.log(keys)
+        for (let i = 0; i < keys.length; i++){
+            //for (let key in state) {
+                if (keys[i] == 'language') {
+                    this.fns.push(
+                        {
+                            name: keys[i],
+                            fn: function (repo) {
+                                return repo[keys[i]] == state[keys[i]]
+                            }
                         }
+                    )
+                } else {
+                    if (keys[i] === 'stars') {
+                        this.fns.push(
+                            {
+                                name: keys[i],
+                                fn: function (repo) {
+                                    return repo.stargazers_count >= state.stars
+                                }
+                            }
+                        )
+                    } else if (keys[i] == 'open_issues_count') {
+                        this.fns.push({
+                            name: keys[i],
+                            fn: function (repo) {
+                                return repo.open_issues_count > 0
+                            }
+                        })
                     }
-                )
-            } else {
-                if (key === 'stars'){
-                    this.fns.push(
-                        {
-                            name: key,
-                            fn: function(repo){
-                                return repo.stargazers_count >= state.stars 
+                    else if (keys[i] == 'topics') {
+                        this.fns.push({
+                            name: keys[i],
+                            fn: function (repo) {
+                                return repo.topics.length > 0
                             }
-                        }
-                    )
-                } else if(key == 'open_issues_count'){
-                    this.fns.push({
-                        name: key,
-                        fn: function (repo){
-                            return repo.open_issues_count > 0
-                        }
-                    })
-                } 
-                else if(key == 'topics'){
-                    this.fns.push({
-                        name: key,
-                        fn: function (repo){
-                            return repo.topics.length > 0
-                        }
-                    })
-                } else if(key == 'type'){
-                    this.fns.push({
-                        name: key,
-                        fn: function (repo){
-                            if(state.type == 'All'){
-                                return true;
-                            } else {
-                                return repo[state.type]
+                        })
+                    } else if (keys[i] == 'type') {
+                        this.fns.push({
+                            name: keys[i],
+                            fn: function (repo) {
+                                if (state.type == 'all') {
+                                    return true;
+                                } else {
+                                    return repo[state.type]
+                                }
                             }
-                        }
-                    })
-                }else{
-                    this.fns.push(
-                        {
-                            name: key,
-                            fn: function(repo){
-                                return moment(repo.updated_at) > state.updated_at 
+                        })
+                    } else {
+                        this.fns.push(
+                            {
+                                name: keys[i],
+                                fn: function (repo) {
+                                    if (state.updated_at == null) {
+                                        return true;
+                                    }
+                                    return moment(repo.updated_at) > state.updated_at
+                                }
                             }
-                        }
-                    )
-                    
-                }
-            }
-        }
-    },
-    getProperConditionFns(condition){
-        return this.fns.filter( item => Object.keys(condition).indexOf(item.name) !== -1)
-    },
-    filter(repos){
-        let fns = this.getProperConditionFns();
+                        )
 
-        return repos.filter(repo => {
+                    }
+                }
+            //}
+        }
+   
+    },
+    getProperConditionFns(condition) {
+        let arr =  this.fns.filter(item => Object.keys(condition).indexOf(item.name) !== -1)
+        return arr;
+    },
+    filter(repos, condition){
+        let fns = this.getProperConditionFns(condition);
+
+        // let arr = repos.filter(repo => {
              
+           
+        // })
+        let filtered = []
+        for (let k = 0; k < repos.length; k++){
             let filterTests = [];
-            for(let i = 0 ; i < fns.length; i++){
-                let res = fns[i].fn.call(repo)
+            for (let i = 0; i < fns.length; i++) {
+                let res = fns[i].fn(repos[k])
                 filterTests.push(res);
             }
 
-            return filterTests.indexOf(false) !== -1;
-        })
+            if (!filterTests.includes(false)) {
+                filtered.push(repos[k]);
+            }
+        }
+
+        this.fns = [];
+
+        return filtered;
     }
 }
+
+export default filter;

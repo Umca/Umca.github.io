@@ -4,15 +4,20 @@ import Filters from './filters';
 import Sortings from './sortings';
 import Cards from './cards';
 import moment from 'moment';
+import ee from '../utils/ee';
+import filter from '../utils/filter';
 
 window.moment = moment;
 
 export default class Main extends React.Component{
     constructor(){
         super();
+        this.repos = JSON.parse(localStorage.getItem('store')) ? JSON.parse(localStorage.getItem('store')) .repos : []
+        console.log(this.repos)
         this.state = {
-            repos : store.data.repos ? store.data.repos : []
+            filtered: this.repos
         }
+        this.addEeListener();
     }
     componentWillMount(){
         if(localStorage.getItem('store')){
@@ -21,6 +26,15 @@ export default class Main extends React.Component{
             })
         }
     }
+    addEeListener() {
+        ee.on('apply_filters', (obj)=>{
+            filter.configureFilterFns(obj);
+            let filtered = filter.filter(this.repos, obj);
+            this.setState({
+                filtered
+            })
+        })
+    }
     render(){
         let locale = moment.locale();
 
@@ -28,7 +42,7 @@ export default class Main extends React.Component{
             <div className='main-container'>
                 <Filters repos = {this.state.repos}/>
                 <Sortings />
-                <Cards repos = {this.state.repos}/>   
+                <Cards repos={this.state.filtered} />
             </div>
         )
     }

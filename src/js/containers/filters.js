@@ -2,8 +2,11 @@ import React from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import moment from 'moment';
-import {withRouter} from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
+import ee from '../utils/ee';
 
+
+console.log(ee)
 
 class Filters extends React.Component{
     constructor(props){
@@ -12,7 +15,7 @@ class Filters extends React.Component{
                 open_issues_count: false,
                 topics: false,
                 stars: "",
-                updated_at: moment(),
+                updated_at:null,
                 type: 'all',
                 language:"",
         };
@@ -20,7 +23,7 @@ class Filters extends React.Component{
             open_issues_count: false,
             topics: false,
             stars: "",
-            updated_at: moment(),
+            updated_at: null,
             type: 'all',
             language:"",
         };
@@ -32,69 +35,6 @@ class Filters extends React.Component{
     }
     componentWillMount(){
         this.getLanguages();
-        this.configureFilterFns();
-    }
-    //get fn to  apply them on every repo when filtering
-    configureFilterFns(){
-        for (let key in this.state){
-            if(key == 'language'){
-                this.fns.push(
-                    {
-                        name: key,
-                        fn: function(repo){
-                            return repo[key] == this.state[key]
-                        }
-                    }
-                )
-            } else {
-                if (key === 'stars'){
-                    this.fns.push(
-                        {
-                            name: key,
-                            fn: function(repo){
-                                return repo.stargazers_count >= this.state.stars 
-                            }
-                        }
-                    )
-                } else if(key == 'open_issues_count'){
-                    this.fns.push({
-                        name: key,
-                        fn: function (repo){
-                            return repo.open_issues_count > 0
-                        }
-                    })
-                } 
-                else if(key == 'topics'){
-                    this.fns.push({
-                        name: key,
-                        fn: function (repo){
-                            return repo.topics.length > 0
-                        }
-                    })
-                } else if(key == 'type'){
-                    this.fns.push({
-                        name: key,
-                        fn: function (repo){
-                            if(this.state.type == 'All'){
-                                return true;
-                            } else {
-                                return repo[this.state.type]
-                            }
-                        }
-                    })
-                }else{
-                    this.fns.push(
-                        {
-                            name: key,
-                            fn: function(repo){
-                                return moment(repo.updated_at) > this.state.updated_at 
-                            }
-                        }
-                    )
-                    
-                }
-            }
-        }
     }
 
     // receive langauges for <select>
@@ -127,11 +67,7 @@ class Filters extends React.Component{
     // handle change event on other filter inputs
     handleChange (field, e) {
         var nextState = {}
-        // nextState[field] = e.target.value
-        // console.log(nextState)
-        // this.setState(nextState)
-        console.log(e.target, field)
-
+    
             if(e.target.type == 'checkbox'){
                 this.setState({
                     [field]: !this.state[field],
@@ -148,14 +84,14 @@ class Filters extends React.Component{
     } 
 
     // submit
-    handleSubmit(e){
+    handleSubmit(e) {
+        this.condition = {};
         e.preventDefault();
-        console.info('filters applied');
+        debugger;
         this.getFilterCondition();
-        //store.add(this.state, 'filters') not sure of needed
-        this.filter();
         this.changeRoute();
-        this.setState(this.cleanState);
+        //this.setState(this.cleanState);
+        ee.emit('apply_filters', this.condition);
     }
 
     changeRoute(){
@@ -167,37 +103,19 @@ class Filters extends React.Component{
     }
 
     // receive num of filters to apply
-    getFilterCondition(){
-        for (let key in this.state ){
-                if(!!this.state[key]){
+    getFilterCondition() {
+        console.log('state', this.state)
+        console.log('condition, this.condition')
+        for (let key in this.state) {
+            if (!!this.state[key] !== false ){
                     this.condition[key] = this.state[key]
                 }
             }
-        console.log('condition', this.condition)
-        store.add(this.condition, 'filtercondition');
     }
     
-    // get proper filter fns
-    getProperConditionFns(){
-        return this.fns.filter( item => Object.keys(this.condition).indexOf(item.name) !== -1)
-    }
+    
 
-    filter(){
-        let fns = this.getProperConditionFns();
-
-        return this.props.repos.filter(repo => {
-             
-            let filterTests = [];
-            for(let i = 0 ; i < fns.length; i++){
-                let res = fns[i].fn.call(this, repo)
-                filterTests.push(res);
-            }
-
-            return filterTests.indexOf(false) !== -1;
-        })
-    }
-
-    render(){
+    render() {
         return(
             <div className="main-filters">
                 <form onSubmit={this.handleSubmit.bind(this)}>
@@ -228,7 +146,9 @@ class Filters extends React.Component{
                 <div>
                     Updated after 
                     <DatePicker
-                        selected={this.state.updated_at}
+                        selected={this.state.updated_at}        
+                            placeholderText="Click to select a date"
+                            dateFormat="DD/MM/YYYY"   
                         onChange={this.handleDateChange.bind(this)}
                     />
                 </div>
