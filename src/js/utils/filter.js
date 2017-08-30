@@ -46,8 +46,12 @@ const filter = {
                             fn: function (repo) {
                                 if (state.type == 'all') {
                                     return true;
+                                } else if (state.type == 'fork' && repo.fork){
+                                    return true
+                                } else if (state.type == 'source' && !repo.fork) {
+                                    return true;
                                 } else {
-                                    return repo[state.type]
+                                    return false;
                                 }
                             }
                         })
