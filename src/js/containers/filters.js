@@ -4,6 +4,8 @@ import 'react-datepicker/dist/react-datepicker.css';
 import moment from 'moment';
 import { withRouter } from 'react-router-dom';
 import ee from '../utils/ee';
+import Select from 'react-select';
+import 'react-select/dist/react-select.css';
 
 
 console.log(ee)
@@ -52,7 +54,11 @@ class Filters extends React.Component{
         }
 
         this.languages = getUniqueValues(this.props.repos.map(repo => repo.language)).filter( lang => lang !== "null")
-        this.languages.unshift(null)
+        //this.languages.unshift(null)
+
+        this.options = this.languages.map(lang => {
+            return {value:lang, label:lang}
+        })
         store.add(this.languages, 'languages');
     }
 
@@ -66,8 +72,8 @@ class Filters extends React.Component{
 
     // handle change event on other filter inputs
     handleChange (field, e) {
-        var nextState = {}
     
+        if (e.target){
             if(e.target.type == 'checkbox'){
                 this.setState({
                     [field]: !this.state[field],
@@ -76,20 +82,24 @@ class Filters extends React.Component{
                 this.setState({
                     type: field,
                 })
-            } else{
-                this.setState({
-                    [field]: e.target.value 
-                })
-            }
+            } 
+        } else {
+            this.setState({
+                [field]: e.value,
+            })
+        }
     } 
+
+    handleSelect(field, e) {
+        console.log(field, e)
+    }
 
     // submit
     handleSubmit(e) {
         this.condition = {};
         e.preventDefault();
-        debugger;
         this.getFilterCondition();
-        this.changeRoute();
+        //this.changeRoute();
         //this.setState(this.cleanState);
         ee.emit('apply_filters', this.condition);
     }
@@ -172,12 +182,11 @@ class Filters extends React.Component{
                         onChange={this.handleChange.bind(this, 'source')}/> Sources</label></li>
                     </ul>
                 </div>
-                <select value={this.state.language} onChange={this.handleChange.bind(this, 'language')}>
-                    {this.languages.map(lang => {
-                        return <option value = {lang} key={lang} >{lang}</option>
-                    })}
-                    
-              </select>
+                <Select
+                        value={this.state.language}
+                        onChange={this.handleChange.bind(this, 'language')}
+                        options={this.options}
+                />      
               <button>Apply</button>
               </form>
             </div>
