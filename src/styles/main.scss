@@ -4,7 +4,7 @@
     height: 100%;
     grid-template-areas: "sortings sortings"
                         "filters cards";
-    grid-template-rows: 100px 1fr;
+    grid-template-rows: 200px 1fr;
     grid-template-columns: 300px 1fr;
 }
 .main-container .main-filters{
