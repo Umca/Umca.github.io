@@ -1,0 +1,33 @@
+.DialogGroup {
+    position: relative;
+}
+
+.Dialog {
+    position: absolute;
+    top: 200px;
+    left: 0;
+    border: 1px solid red;
+    height: 300px;
+    width: 100%;
+    background: #ffdfef;
+    padding: 15px;
+}
+
+.Dialog-anim-enter {
+    transform: translateX(-100%);
+    transition: all 1s;
+}
+
+.Dialog-anim-enter-active {
+    transform: translateX(0%);
+}
+
+.Dialog-anim-leave {
+    transform: translateX(0%);
+    transition: all 1s;
+}
+
+.Dialog-anim-leave-active {
+    transform: translateX(100%);
+    opacity: 0;
+}
