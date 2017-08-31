@@ -7,6 +7,7 @@ import moment from 'moment';
 import ee from '../utils/ee';
 import filter from '../utils/filter';
 import sorting from '../utils/sort';
+import '../../styles/main.css';
 
 window.moment = moment;
 

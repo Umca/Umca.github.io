@@ -3,6 +3,7 @@ import request from '../utils/request';
 import store from '../utils/store';
 import SubmitButton from '../components/submit';
 import RadioButton from '../components/radio';
+import '../../styles/initial.css';
 
 class InitialComponent extends Component{
     constructor(props){
