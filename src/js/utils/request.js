@@ -1,5 +1,5 @@
 const request = {
-    send(url){
+    sendInit(url){
 
         let headers = new Headers();
         headers.append('Accept', 'application/vnd.github.mercy-preview+json');
@@ -13,7 +13,14 @@ const request = {
                 }
                 throw new Error ('There is now such user / org!');
             })
+    },
+
+    send(url) {
+        return fetch(url)
+            .then(res => res.json())
+            .then(res => res);
     }
+
 }
 
 export default request;
