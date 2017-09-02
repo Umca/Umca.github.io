@@ -6,6 +6,10 @@ import { withRouter } from 'react-router-dom';
 import ee from '../utils/ee';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
+import RadioButton from '../components/radio';
+import Checkbox from '../components/checkbox';
+import '../../styles/filter.css';
+import '../../styles/parts.css';
 
 
 console.log(ee)
@@ -16,7 +20,7 @@ class Filters extends React.Component{
         this.state = {
                 open_issues_count: false,
                 topics: false,
-                stars: "",
+                stars: undefined,
                 updated_at:null,
                 type: 'all',
                 language:"",
@@ -24,7 +28,7 @@ class Filters extends React.Component{
         this.cleanState = {
             open_issues_count: false,
             topics: false,
-            stars: "",
+            stars: undefined,
             updated_at: null,
             type: 'all',
             language:"",
@@ -72,7 +76,7 @@ class Filters extends React.Component{
 
     // handle change event on other filter inputs
     handleChange (field, e) {
-    
+        console.log( field, e.value)
         if (e.target){
             if(e.target.type == 'checkbox'){
                 this.setState({
@@ -82,17 +86,17 @@ class Filters extends React.Component{
                 this.setState({
                     type: field,
                 })
-            } 
+            } else if (e.target.type == 'number') {
+                this.setState({
+                    stars: e.target.value
+                })
+            }
         } else {
             this.setState({
                 [field]: e.value,
             })
         }
     } 
-
-    handleSelect(field, e) {
-        console.log(field, e)
-    }
 
     // submit
     handleSubmit(e) {
@@ -129,65 +133,84 @@ class Filters extends React.Component{
         return(
             <div className="main-filters">
                 <form onSubmit={this.handleSubmit.bind(this)}>
-                <div>
-                    <label>
-                        Has open issues <input
-                        type ='checkbox' 
+                    <Checkbox
                         onChange={this.handleChange.bind(this, 'open_issues_count')}
-                        checked = {this.state.open_issues_count}
-                        /> 
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        Has open topics <input 
-                        type ='checkbox'
+                        checked={this.state.open_issues_count}
+                        label="has open issues"
+                    />  
+                    <Checkbox
                         onChange={this.handleChange.bind(this, 'topics')}
-                        checked = {this.state.topics}
-                        /> 
-                    </label>
-                </div>
-                <div>
-                    Starred >= <input
+                        checked={this.state.topics}
+                        label="has open topics"
+                    />  
+                
+                <div className="main-filter-stars">
+                     <label>
+                        starred >=
+                    <input
+                       
+                    className="search-input filter-input "        
                     type='number'
                     onChange={this.handleChange.bind(this, 'stars')}
-                    value={this.state.stars}/> times
+                    value={this.state.stars} /> times
+                    </label>        
                 </div>
                 <div>
-                    Updated after 
+                    updated after
+                    <div className="datepicker-wrapper">    
                     <DatePicker
                         selected={this.state.updated_at}        
-                            placeholderText="Click to select a date"
+                            placeholderText="..."
                             dateFormat="DD/MM/YYYY"   
+                            className="search-input filter-input zIndex"
                         onChange={this.handleDateChange.bind(this)}
                     />
+                    </div>        
                 </div>
-                <div>
-                    Type :
-                    <ul>
-                        <li><label><input type="radio" 
-                        name="type"
-                        value="all" 
-                        checked={this.state.type === 'all'}
-                        onChange={this.handleChange.bind(this, 'all')}/> All</label></li>
-                        <li><label><input type="radio" 
-                        name="type" 
-                        value="fork"
-                        checked={this.state.type === 'fork'}
-                        onChange={this.handleChange.bind(this, 'fork')}/> Forks</label></li>
-                        <li><label><input type="radio" 
-                        name="type" 
-                        checked={this.state.type === 'source'}
-                        value="source" 
-                        onChange={this.handleChange.bind(this, 'source')}/> Sources</label></li>
+                <div className="type-block">
+                    <ul className="filters">
+                            <li>
+                                <RadioButton
+                                    val="all"
+                                    handleChange={this.handleChange.bind(this, 'all')}
+                                    isChecked={this.state.type === 'all'}
+                                    op="main-block"
+                                    label="all"
+                                    feature={true}
+                                />
+                            </li>  
+                            <li>
+                                <RadioButton
+                                    val="fork"
+                                    handleChange={this.handleChange.bind(this, 'fork')}
+                                    isChecked={this.state.type === 'fork'}
+                                    op="main-block"
+                                    label="forks"
+                                    feature={true}
+                                />
+                            </li>
+                            <li>
+                                <RadioButton
+                                    val="sources"
+                                    handleChange={this.handleChange.bind(this, 'source')}
+                                    isChecked={this.state.type === 'source'}
+                                    op="main-block"
+                                    label="sources"
+                                    feature={true}
+                                />
+                            </li>
                     </ul>
                 </div>
                 <Select
                         value={this.state.language}
                         onChange={this.handleChange.bind(this, 'language')}
                         options={this.options}
-                />      
-              <button>Apply</button>
+                        className="filter-select"
+                        placeholder="language"
+                />
+                <div className="filter-apply">    
+                        <button>Apply</button>
+              </div>          
               </form>
             </div>
         )

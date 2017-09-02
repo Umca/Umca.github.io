@@ -1,12 +1,16 @@
 import React from 'react';
 import ee from '../utils/ee';
+import RadioButton from '../components/radio';
+import Select from 'react-select';
+import 'react-select/dist/react-select.css';
+import '../../styles/sort.css';
 
 export default class Sortings extends React.Component{
     constructor(){
         super();
         this.state = {
             sort_type: false,
-            order: 'asc'
+            order: 'ASC'
         }
     }
 
@@ -15,19 +19,28 @@ export default class Sortings extends React.Component{
     }
 
     handleChange(type, e) {
+        //console.log(e.target.value)
+        console.log(e.value)
         if(type == 'proper'){
             this.setState({
-                sort_type: e.target.value
+                sort_type: e.target.value.replace(" ", '_')
             }, () => {
                 this.emitEvent();
             })
-        } else {
+        } else if (type == "order") {
             this.setState({
-                order: e.target.value
+                order: e.value
             }, () => {
                 this.emitEvent();
             })
         }
+        // else { 
+        //     this.setState({
+        //         order: e.target.value
+        //     }, () => {
+        //         this.emitEvent();
+        //     })
+        // }
     }
     showOrderCheckboxes() {
         return !!this.state.sort_type;
@@ -36,40 +49,55 @@ export default class Sortings extends React.Component{
     render(){
         return(
             <div className="main-sortings">
-                <ul>
-                    <li><label><input type="radio"
-                        name="sort_type"
-                        value="name"
-                        checked={this.state.sort_type === 'name'}
-                        onChange={this.handleChange.bind(this, 'proper')} /> Repo name</label></li>
-                    <li><label><input type="radio"
-                        name="sort_type"
-                        value="stargazers_count"
-                        checked={this.state.sort_type === 'stargazers_count'}
-                        onChange={this.handleChange.bind(this, 'proper')} /> Stars</label></li>
-                    <li><label><input type="radio"
-                        name="sort_type"
-                        checked={this.state.sort_type === 'open_issues_count'}
-                        value="open_issues_count"
-                        onChange={this.handleChange.bind(this, 'proper')} /> Open issues</label></li>
-                    <li><label><input type="radio"
-                        name="sort_type"
-                        checked={this.state.sort_type === 'updated_at'}
-                        value="updated_at"
-                        onChange={this.handleChange.bind(this, 'proper')} /> Updated at</label></li>
+                <ul className="sorts">
+                    <li>
+                        <RadioButton
+                            val="name"
+                            handleChange={this.handleChange.bind(this, 'proper')}
+                            isChecked={this.state.sort_type === 'name'}
+                            op='main-block'
+                            name="sort_type"
+                            label="name"
+                        />
+                    </li>
+                    <li>
+                        <RadioButton
+                            val="stargazers_count"
+                            handleChange={this.handleChange.bind(this, 'proper')}
+                            isChecked={this.state.sort_type === 'stargazers_count'}
+                            op='main-block'
+                            name="sort_type"
+                            label="stars"
+                        />
+                    </li>
+                    <li>
+                        <RadioButton
+                            val="open_issues_count"
+                            handleChange={this.handleChange.bind(this, 'proper')}
+                            isChecked={this.state.sort_type === 'open_issues_count'}
+                            op='main-block'
+                            name="sort_type"
+                            label="open issues"
+                        />
+                    </li>
+                    <li>
+                        <RadioButton
+                            val="updated_at"
+                            handleChange={this.handleChange.bind(this, 'proper')}
+                            isChecked={this.state.sort_type === 'updated_at'}
+                            op='main-block'
+                            name="sort_type"
+                            label="updated at"
+                        />
+                    </li>
                 </ul>
-                <ul className={ (this.showOrderCheckboxes() ? 'visible' : 'invisible')} >
-                    <li><label><input type="checkbox"
-                        name="order"
-                        checked={this.state.order === 'asc'}
-                        value="asc"
-                        onChange={this.handleChange.bind(this, 'order')} /> ASC</label></li>
-                    <li><label><input type="checkbox"
-                        name="order"
-                        checked={this.state.order === 'desc'}
-                        value="desc"
-                        onChange={this.handleChange.bind(this, 'order')} /> DESC</label></li>
-                </ul>
+                <Select
+                    value={this.state.order}
+                    onChange={this.handleChange.bind(this, 'order')}
+                    options={[{ value: 'ASC', label: 'ASC', className: 'options-color' }, { value: 'DESC', label: 'DESC', className: 'options-color' }]}
+                    className="select-width"
+                />
+                
             </div>
         )
     }

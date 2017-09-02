@@ -7,6 +7,7 @@ import moment from 'moment';
 import ee from '../utils/ee';
 import filter from '../utils/filter';
 import sorting from '../utils/sort';
+import Button from '../components/submit';
 import '../../styles/main.css';
 
 window.moment = moment;
@@ -58,6 +59,9 @@ export default class Main extends React.Component{
                 <Filters repos = {this.state.repos}/>
                 <Sortings />
                 <Cards repos={this.state.filtered} />
+                <div className="main-button">
+                    <button>load more</button>
+                </div>    
             </div>
         )
     }
