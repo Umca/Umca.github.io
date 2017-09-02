@@ -1,0 +1,54 @@
+.filters {
+    list-style: none;
+    padding-left: 0px;
+    margin-top: 0;
+}
+
+.filters li {
+    height: 40px;
+}
+
+.filter-input {
+    width: 100px;
+    padding: 3px;
+    line-height: 0;
+    margin: 0;
+    margin-left: 10px;
+    display: inline;
+}
+
+.main-filter-stars {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.datepicker-wrapper {
+    position: relative;
+    top: -24px;
+    left: 138px;
+}
+
+.type-block {
+    margin-top: -33px;
+}
+
+.filter-radios {
+    left: 0px !important;
+}
+
+.filter-label {
+    padding: 0px 25px 0px 7px;
+}
+
+.filter-select {
+    margin: 30px 0;
+    width: 200px;
+}
+
+.filter-apply {
+    display: flex;
+    justify-content: center;
+}
+.datepicker-wrapper{
+    z-index:9999;
+}

@@ -7,7 +7,7 @@ const sorting = {
     sort(arr, proper, type, order) {
         let sorted;
         switch (order) {
-            case 'asc':
+            case 'ASC':
                 sorted = this.sortAsc(arr, proper, type);
                 break;
             default:

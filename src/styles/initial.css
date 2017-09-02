@@ -4,9 +4,12 @@
     text-align: center
 }
 
+
+
 .initial-radio-control {
     display: flex;
     justify-content: center;
+    margin-left: 75px;
 }
 
 .initial-radio-control label {
