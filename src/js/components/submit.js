@@ -1,12 +1,15 @@
 import React from 'react';
+import '../../styles/parts.css'
 
-const  SubmitButton  = ({...props}) =>{
+const  Button  = ({...props}) =>{
         return(
             <button 
-                type="submit">
-                Press me
+                type="submit"
+                className="submit-button"
+            >
+                {props.text}
             </button>
         )
 }
 
-export default SubmitButton;
+export default Button;
