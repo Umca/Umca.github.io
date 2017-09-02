@@ -3,6 +3,7 @@ const path = require('path');
 const outputPath = path.resolve(__dirname, './dist');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const webpackConfig = {
     entry: {
@@ -12,7 +13,8 @@ const webpackConfig = {
     },
     output: {
         path: outputPath,
-        filename: 'dist/[name].js'
+        filename: 'dist/[name].js',
+        publicPath: '/'
     },
     module: {
         rules: [{
@@ -50,11 +52,12 @@ const webpackConfig = {
         }),
         new webpack.NamedModulesPlugin,
         new webpack.HotModuleReplacementPlugin(),
-        new ExtractTextPlugin('style.css')
+        new ExtractTextPlugin('style.css'),
+        new CopyWebpackPlugin([{ from: 'src/assets', to: 'assets' }])
     ],
     devServer: {
         contentBase: path.resolve(__dirname, './dist'),
-        port: 8082,
+        port: 8083,
         historyApiFallback: true,
         hot: true,
     },
