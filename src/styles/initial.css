@@ -4,8 +4,6 @@
     text-align: center
 }
 
-
-
 .initial-radio-control {
     display: flex;
     justify-content: center;
@@ -14,4 +12,10 @@
 
 .initial-radio-control label {
     padding: 10px;
+}
+
+.error{
+    color: #ff8100;
+    font-weight: 600;
+    text-transform: uppercase;
 }
