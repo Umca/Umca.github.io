@@ -78,13 +78,10 @@ const filter = {
         let arr =  this.fns.filter(item => Object.keys(condition).indexOf(item.name) !== -1)
         return arr;
     },
-    filter(repos, condition){
+    filter(repos, condition) {
+        debugger;
         let fns = this.getProperConditionFns(condition);
 
-        // let arr = repos.filter(repo => {
-             
-           
-        // })
         let filtered = []
         for (let k = 0; k < repos.length; k++){
             let filterTests = [];

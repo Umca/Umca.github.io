@@ -63,7 +63,7 @@ class Filters extends React.Component{
         this.options = this.languages.map(lang => {
             return {value:lang, label:lang}
         })
-        store.add(this.languages, 'languages');
+        store.save('languages', this.languages);
     }
 
     // handle change event on datepicker
@@ -76,7 +76,6 @@ class Filters extends React.Component{
 
     // handle change event on other filter inputs
     handleChange (field, e) {
-        console.log( field, e.value)
         if (e.target){
             if(e.target.type == 'checkbox'){
                 this.setState({
@@ -103,8 +102,6 @@ class Filters extends React.Component{
         this.condition = {};
         e.preventDefault();
         this.getFilterCondition();
-        //this.changeRoute();
-        //this.setState(this.cleanState);
         ee.emit('apply_filters', this.condition);
     }
 
