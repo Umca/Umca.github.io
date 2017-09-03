@@ -8,6 +8,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const webpackConfig = {
     entry: {
         app: [
+            'babel-polyfill',
             path.resolve(__dirname, './src/index.js')
         ]
     },
