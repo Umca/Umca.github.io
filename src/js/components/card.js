@@ -1,14 +1,30 @@
 import React from 'react';
 import moment from 'moment';
-import '../../styles/card.css'
+import '../../styles/card.css';
+import ee from '../utils/ee';
+import store from '../utils/store'
 
 class Card extends React.Component {
         constructor(props){
                 super(props);
+                this.info = {};
         }
+        handleClick(e) {
+                ee.emit('modal_open', this.props.repo.id)
+                store.save('opened_card', this.props.repo.id);  
+        }
+
+        trimNumber(num) {
+                if (num / 1000 > 1) {
+                        return `${num / 1000} K`
+                } else {
+                        return num;
+                }
+        }
+        
         render(){
                 return (
-                        <div className="main-card" onClick={this.props.openModal} data-id={this.props.repo.id}>
+                        <div className="main-card" onClick={this.handleClick.bind(this)} data-id={this.props.repo.id}>
                                 <h1 className="card-title">{this.props.repo.name}</h1>
                                 <p className="card-description">Description : {this.props.repo.description}</p>
                                 <p className="card-fork-star">
