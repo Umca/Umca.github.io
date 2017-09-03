@@ -21,12 +21,19 @@ class Card extends React.Component {
                         return num;
                 }
         }
+        shorten(text, maxLength) {
+                var ret = text;
+                if (ret.length > maxLength) {
+                        ret = ret.substr(0, maxLength - 3) + "...";
+                }
+                return ret;
+        }
         
         render(){
                 return (
                         <div className="main-card" onClick={this.handleClick.bind(this)} data-id={this.props.repo.id}>
                                 <h1 className="card-title">{this.props.repo.name}</h1>
-                                <p className="card-description">Description : {this.props.repo.description}</p>
+                                <div className="card-description">Description : {this.shorten(this.props.repo.description, 100)}</div>
                                 <p className="card-fork-star">
                                 {
                                         this.props.repo.fork ?

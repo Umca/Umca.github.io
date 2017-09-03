@@ -15,6 +15,7 @@ import _ from 'lodash';
 import '../../styles/modal.css';
 import { Pie } from "react-chartjs-2";
 import Chart from 'chart.js';
+import Loader from 'react-loader';
 
 
 window.moment = moment;
@@ -73,6 +74,7 @@ export default class Main extends React.Component {
     }
 
     collectPieData() {
+        debugger;
         let l = this.langRatio();
         let colors = this.getColors(l.length);
 
@@ -102,7 +104,13 @@ export default class Main extends React.Component {
         })
     }
 
-
+    changeRoute() {
+        let path = `${this.props.history.location.pathname}?sort=updated`;
+        for (let key in this.condition) {
+            path += `&${key}=${this.condition[key]}`
+        }
+        this.props.history.push(path)
+    }
 
     closeModal() {
         this.setState({
@@ -165,7 +173,6 @@ export default class Main extends React.Component {
         })[0];
 
         if (this.isInStorage()) {
-            debugger;
             this.setState({
                 modal_info: {
                     contribs: JSON.parse(store.extract('contribs')),
@@ -321,11 +328,11 @@ export default class Main extends React.Component {
                     <div className="modal-container">{
                         this.state.modal_info ?
                             <div>
-                                <div>
-                                    <a href={this.state.modal_info.link}>{this.state.modal_info.link}</a>
-                                </div>
-                                <button onClick={this.closeModal.bind(this)}>X</button>
-                                <table>
+                                
+                                    <p><a href={this.state.modal_info.link}>{this.state.modal_info.link}</a>
+                                
+                                <button onClick={this.closeModal.bind(this)}>x</button></p>
+                                <table className="blueTable">
                                 <thead>    
                                     <tr>
                                         <td>Name</td>    
@@ -344,26 +351,28 @@ export default class Main extends React.Component {
                                     )
                                 })}
                             </tbody>
-                            </table>        
-                            <div>{this.state.modal_info.pr.map(pr => {
-                                    return (
-                                        <p key={pr[0].link}>{pr[0].link}</p>
-                                    )
-                                })}
-                            </div>
+                                </table> 
+                            {
+                                    this.state.modal_info.pr.length > 0 ?
+                                        < ul > PRs: {
+                                                this.state.modal_info.pr.map(pr => {
+                                                    return ( <
+                                                        li key = {
+                                                            pr[0].link
+                                                        } > < a href = {pr[0].link} > {
+                                                            pr[0].link
+                                                        } </a></li>
+                                                    )
+                                                })
+                                        } </ul> :
+                                        <p>Oops, no open PRs...</p>
+                            }
                             <div>   
-                                    
-                                    <Pie width={300} height={250} data={this.state.pieData}
-                                        
-                                    ><canvas/></Pie>    
+                                    {this.state.pieData && this.state.pieData.datasets > 0 ? <Pie width={300} height={250} data={this.state.pieData}  ><canvas /></Pie> : null}    
                             </div>    
                             </div>    
-                            
-                            
                             :
-                                <div>Loading ...</div> 
-                                
-                    
+                            < Loader loaded = {false} color = "#007eff" / >
                     }
                     </div>    
                    

@@ -12,6 +12,7 @@ import '../../styles/filter.css';
 import '../../styles/parts.css';
 
 
+
 console.log(ee)
 
 class Filters extends React.Component{
@@ -105,13 +106,6 @@ class Filters extends React.Component{
         ee.emit('apply_filters', this.condition);
     }
 
-    changeRoute(){
-        let path = `${this.props.history.location.pathname}?sort=updated`;
-        for(let key in this.condition){
-            path += `&${key}=${this.condition[key]}`
-        }
-        this.props.history.push(path)
-    }
 
     // receive num of filters to apply
     getFilterCondition() {
@@ -134,7 +128,7 @@ class Filters extends React.Component{
                         onChange={this.handleChange.bind(this, 'open_issues_count')}
                         checked={this.state.open_issues_count}
                         label="has open issues"
-                    />  
+                    /> 
                     <Checkbox
                         onChange={this.handleChange.bind(this, 'topics')}
                         checked={this.state.topics}
