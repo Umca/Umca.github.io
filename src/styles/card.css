@@ -4,6 +4,7 @@
     width: 30%;
     border: 1px solid grey;
     max-height: 260px;
+    cursor: pointer;
 }
 
 .card-title {
@@ -21,6 +22,7 @@
     padding: 0 0 10px;
     font-size: 18px;
     font-weight: 400;
+    text-overflow: ellipsis;
 }
 
 .card-fork-star {
