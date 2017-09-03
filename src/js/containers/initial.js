@@ -24,7 +24,8 @@ class InitialComponent extends Component{
     }
     handleInputChange(e){
         this.setState({
-            name: e.target.value
+            name: e.target.value,
+            errors:null
         })
     }
     changeRoute(){
@@ -65,8 +66,9 @@ class InitialComponent extends Component{
                     this.setState({
                         errors: err.message
                     }, () => {
-                        this.saveDataToStore();
-                        // show error message
+                        this.setState({
+                            name: ""
+                        })
                     });
                 })
         //} else {
@@ -108,7 +110,10 @@ class InitialComponent extends Component{
                                     name="type"
                             label="org"
                         />
-                    </div>    
+                    </div> 
+                    {
+                        this.state.errors ? <p className="error">{this.state.errors}</p> : null
+                    }
                     <Button text="PRESS ME"/>
                 </form>
             </div>

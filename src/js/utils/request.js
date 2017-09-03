@@ -11,7 +11,7 @@ const request = {
             headers: headers
         })
             .then(res => {
-                if(res.message !== 'Not found'){
+                if(res.statusText !== 'Not Found'){
                     return res.json();
                 }
                 throw new Error ('There is now such user / org!');
