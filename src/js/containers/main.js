@@ -54,7 +54,8 @@ export default class Main extends React.Component {
             page: this.state.page+=1
         }, () =>{
             let name = store.extract('name');
-            let url = `https://api.github.com/users/${name}/repos?page=${this.state.page}&per_page=30`
+            let type = store.extract('type');
+            let url = `https://api.github.com/${type}/${name}/repos?page=${this.state.page}&per_page=30`
             request.send(url). then((response) => {
                 this.repos = this.repos.concat(response);
                 console.log(this.repos)
@@ -143,7 +144,6 @@ export default class Main extends React.Component {
             store.save('link', JSON.stringify(info.link));
             store.save('forks_url', JSON.stringify(info.forks_url));
             console.log(info, 'info')
-            debugger;
             this.setState({
                 modal_info: info
             }, () => {

@@ -1,7 +1,4 @@
 import moment from 'moment';
-import { withRouter } from 'react-router-dom';
-
-
 
 const sorting = {
 
