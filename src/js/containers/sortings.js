@@ -4,6 +4,17 @@ import RadioButton from '../components/radio';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import '../../styles/sort.css';
+import { withRouter } from 'react-router-dom';
+
+// const withRouting = (component) =>{
+//     class extends React.Component{
+//         return(
+//             withRouter(({history, ...props}) => (
+//                 component
+//             ))
+//         )
+//     }
+// }
 
 export default class Sortings extends React.Component{
     constructor(){
@@ -19,8 +30,7 @@ export default class Sortings extends React.Component{
     }
 
     handleChange(type, e) {
-        //console.log(e.target.value)
-        console.log(e.value)
+
         if(type == 'proper'){
             this.setState({
                 sort_type: e.target.value.replace(" ", '_')
@@ -34,13 +44,6 @@ export default class Sortings extends React.Component{
                 this.emitEvent();
             })
         }
-        // else { 
-        //     this.setState({
-        //         order: e.target.value
-        //     }, () => {
-        //         this.emitEvent();
-        //     })
-        // }
     }
     showOrderCheckboxes() {
         return !!this.state.sort_type;

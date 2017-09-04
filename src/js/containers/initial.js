@@ -11,7 +11,7 @@ class InitialComponent extends Component{
         super(props);
         this.state = {
             checked: store.extract('checked') ||"user",
-            name: store.extract('name') || "",
+            name: "",
             repos: null,
             errors: null
         }
@@ -48,7 +48,7 @@ class InitialComponent extends Component{
         console.log('submit')
         e.preventDefault();
         //if (!this.checkForLocalStorage()) {
-            this.url = `https://api.github.com/${this.state.checked}s/${this.state.name}/repos`;
+            this.url = `https://api.github.com/${this.state.checked}s/${this.state.name}/repos?page=1&per_page=30`;
             request
                 .sendInit(this.url)
                 .then(response => {

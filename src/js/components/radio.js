@@ -10,8 +10,7 @@ const RadioButton = (props) => {
                 name={props.name}
                 checked={props.isChecked}
                 onChange={props.handleChange}
-                   
-                
+
             />
             <label
                 className={(props.feature ? 'filter-radios' : "")}    
