@@ -9,11 +9,12 @@ export default class Cards extends React.Component{
     render(){
         return (
                 <div className="main-cards">
-                    {
+                {this.props.repos.length > 0 ?
                         this.props.repos.map( repo => {
                             return <Card repo={repo} key={repo.id} />
-                        })
-                    }
+                    }) :
+                    <div>No matches...</div>
+                }
                 </div>  
         )
     }
