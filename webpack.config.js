@@ -4,7 +4,6 @@ const outputPath = path.resolve(__dirname, './dist');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 const webpackConfig = {
     entry: {
@@ -56,7 +55,6 @@ const webpackConfig = {
         new webpack.HotModuleReplacementPlugin(),
         new ExtractTextPlugin('style.css'),
         new CopyWebpackPlugin([{ from: 'src/assets', to: 'assets' }]),
-        new UglifyJSPlugin()
     ],
     devServer: {
         contentBase: path.resolve(__dirname, './dist'),
