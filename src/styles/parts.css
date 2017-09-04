@@ -264,4 +264,22 @@ button:hover {
     border: 1px solid #007eff;
 }
 
+.checked-text{
+    color: #007eff !important;
+}
+.checked-control-indicator{
+    background: #ffff;
+    border: 3px solid #007eff;
+}
+.fake-checked {
+    left: 4px;
+    top: 4px;
+    width: 9px;
+    height: 8px;
+    border: solid 3px #007eff;
+    border-width: 2px;
+    background: #007eff;
+    position: relative;
+}
+
 
