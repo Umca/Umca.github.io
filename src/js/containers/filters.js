@@ -39,27 +39,59 @@ class Filters extends React.Component{
     componentWillMount(){
         this.getLanguages();
         this.updateState(this.parseUrl(this.props.history));
+        
+    }
+    componentDidMount() {
+        this.rerender();
     }
 
-    componentWillReceiveProps(nextProps){
-        if(this.props === nextProps){
-            return;
+    rerender() {
+        this.getFilterCondition();
+        ee.emit('apply_filters', this.condition);
+    }
+
+    parseUrl(str) {
+        debugger;
+        if (this.props.history) {
+            let query = str.split('?')[1].split('&').slice(1);
+            let obj = {};
+            let values = query.map(str => {
+
+                return str.split('=')
+            })
+
+            for (let i = 0; i < values.length; i++){
+                let arr = values[i]
+
+                if (arr[0] == 'order' || arr[0] == 'filter') {
+                    continue;
+                }
+                if (arr[1] == 'true') {
+                    arr[1] = true;
+                } else if (arr[0] == 'updated_at') {
+                    arr[1] = moment(+arr[1])
+                }
+                obj[arr[0]] = arr[1]
+            }
+
+            // values.forEach((arr) => {
+            //     if (arr[0] == 'order' || arr[0] == 'filter') {
+            //         continue;
+            //     }
+            //     if (arr[1] == 'true') {
+            //         arr[1] = true;
+            //     } else if (arr[0] == 'updated_at'){
+            //         arr[1] = moment(+arr[1])
+            //     }
+            //     obj[arr[0]] = arr[1]
+            // })
+            console.log(obj, 'url')
+            return obj;    
         }
+        
     }
 
-    parseUrl(str){
-        let query = str.split('?')[1].split('&').slice(1);
-        let obj ={};
-        let values = query.map( str => {
-            return str.split('=')
-        })
-        values.forEach((arr) => {
-            obj[arr[0]] = arr[1]
-        })
-        return obj;
-    }
-
-    updateState(obj){
+    updateState(obj) {
         for(let key in obj){
             this.setState({
                 [key]: obj[key]
@@ -99,13 +131,10 @@ class Filters extends React.Component{
     }
 
     // handle change event on other filter inputs
-    handleChange (field, e) {
+    handleChange(field, e) {
+        debugger;
         if (e.target){
-            if(e.target.type == 'checkbox'){
-                this.setState({
-                    [field]: !this.state[field],
-                })
-            } else if(e.target.type == 'radio'){
+            if(e.target.type == 'radio'){
                 this.setState({
                     type: field,
                 })
@@ -113,7 +142,11 @@ class Filters extends React.Component{
                 this.setState({
                     stars: e.target.value
                 })
-            }
+            } else {
+                this.setState({
+                    [field]: e.target.checked,
+                })
+            } 
         } else {
             this.setState({
                 [field]: e.value,
@@ -123,7 +156,6 @@ class Filters extends React.Component{
 
     // submit
     handleSubmit(e) {
-        debugger;
         this.condition = {};
         e.preventDefault();
         this.getFilterCondition();
@@ -145,7 +177,7 @@ class Filters extends React.Component{
                 }
             }
     }
-    parseUrl
+   
 
     render() {
         return(
@@ -153,12 +185,12 @@ class Filters extends React.Component{
                 <form onSubmit={this.handleSubmit.bind(this)}>
                     <Checkbox
                         onChange={this.handleChange.bind(this, 'open_issues_count')}
-                        checked={this.state.open_issues_count}
+                        isChecked={this.state.open_issues_count}
                         label="has open issues"
                     /> 
                     <Checkbox
                         onChange={this.handleChange.bind(this, 'topics')}
-                        checked={this.state.topics}
+                        isChecked={this.state.topics}
                         label="has open topics"
                     />  
                 
@@ -235,11 +267,18 @@ class Filters extends React.Component{
 
 export default Filters;
 
-const Button = withRouter(({ history, ...props}) => {
+const Button = withRouter(({ history, ...props }) => {
 
-    let path = `?sort=updated`;
+    let _path = `filter=updated`;
     for (let key in props.p) {
-        path += `&${key}=${props.p[key]}`
+        _path += `&${key}=${props.p[key]}`
+    }
+
+    let path = '';
+    if (history.location.search && history.location.search.indexOf('filter=updated') == -1) {
+        path += history.location.search + `&${_path}`;
+    } else {
+        path += `?${_path}`;
     }
 
     return (

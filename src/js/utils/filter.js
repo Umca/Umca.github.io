@@ -1,7 +1,6 @@
 const filter = {
     fns:[],
     configureFilterFns(state) {
-        debugger;
         let keys = Object.keys(state);
         console.log(keys)
         for (let i = 0; i < keys.length; i++){
@@ -79,7 +78,6 @@ const filter = {
         return arr;
     },
     filter(repos, condition) {
-        debugger;
         let fns = this.getProperConditionFns(condition);
 
         let filtered = []
