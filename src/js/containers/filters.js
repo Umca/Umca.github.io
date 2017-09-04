@@ -11,10 +11,6 @@ import Checkbox from '../components/checkbox';
 import '../../styles/filter.css';
 import '../../styles/parts.css';
 
-
-
-console.log(ee)
-
 class Filters extends React.Component{
     constructor(props){
         super(props);
@@ -42,9 +38,36 @@ class Filters extends React.Component{
     }
     componentWillMount(){
         this.getLanguages();
+        this.updateState(this.parseUrl(this.props.history));
     }
 
-    // receive langauges for <select>
+    componentWillReceiveProps(nextProps){
+        if(this.props === nextProps){
+            return;
+        }
+    }
+
+    parseUrl(str){
+        let query = str.split('?')[1].split('&').slice(1);
+        let obj ={};
+        let values = query.map( str => {
+            return str.split('=')
+        })
+        values.forEach((arr) => {
+            obj[arr[0]] = arr[1]
+        })
+        return obj;
+    }
+
+    updateState(obj){
+        for(let key in obj){
+            this.setState({
+                [key]: obj[key]
+            })
+        }
+    }
+
+    // receive languages for <select>
     getLanguages(){
  
         function getUniqueValues(arr){
@@ -100,25 +123,29 @@ class Filters extends React.Component{
 
     // submit
     handleSubmit(e) {
+        debugger;
         this.condition = {};
         e.preventDefault();
         this.getFilterCondition();
         ee.emit('apply_filters', this.condition);
     }
 
+    getProps(){
+        this.condition = {};
+        this.getFilterCondition();
+        return this.condition;
+    }
+
 
     // receive num of filters to apply
     getFilterCondition() {
-        console.log('state', this.state)
-        console.log('condition, this.condition')
         for (let key in this.state) {
             if (!!this.state[key] !== false ){
                     this.condition[key] = this.state[key]
                 }
             }
     }
-    
-    
+    parseUrl
 
     render() {
         return(
@@ -199,13 +226,32 @@ class Filters extends React.Component{
                         className="filter-select"
                         placeholder="language"
                 />
-                <div className="filter-apply">    
-                        <button>Apply</button>
-              </div>          
+                         <Button p={this.getProps()}/>
               </form>
             </div>
         )
     }
 }
 
-export default withRouter(Filters);
+export default Filters;
+
+const Button = withRouter(({ history, ...props}) => {
+
+    let path = `?sort=updated`;
+    for (let key in props.p) {
+        path += `&${key}=${props.p[key]}`
+    }
+
+    return (
+    <button
+    className="filter-apply"
+    type='submit'
+    onClick={() => { history.push(path) }}
+  >
+    Apply
+  </button>
+  )})
+
+//   <div className="filter-apply">    
+//   <button>Apply</button>
+// </div> 

@@ -27,7 +27,8 @@ export default class Main extends React.Component {
         this.state = {
             filtered: this.repos,
             modal_info: null,
-            openedRepo: null
+            openedRepo: null,
+            page: 1
         }
         this.types = {
             name: 'string',
@@ -47,22 +48,43 @@ export default class Main extends React.Component {
             })
         }
     }
+    
+    handleLoadMore(){
+        this.setState({
+            page: this.state.page+=1
+        }, () =>{
+            let name = store.extract('name');
+            let url = `https://api.github.com/users/${name}/repos?page=${this.state.page}&per_page=30`
+            request.send(url). then((response) => {
+                this.repos = this.repos.concat(response);
+                console.log(this.repos)
+                this.setState({
+                    filtered: this.repos
+                })
+            });
+        })
+    }
 
     getColors(amount) {
         return this.colors.slice(0, amount);
     }
 
     langRatio() {
-        let sum = this.state.modal_info.repo_languages.reduce((num, arr) => {
-            return num + arr[1]
-        }, 0);
+        console.log(this.state.modal_info.repo_languages)
+        // let sum = this.state.modal_info.repo_languages.reduce((num, arr) => {
+        //     return num + arr[1]
+        // }, 0);
 
-        let ratio = this.state.modal_info.repo_languages.map(lang => {
-            return lang[1] / sum;
-        })
+        // let ratio = this.state.modal_info.repo_languages.map(lang => {
+        //     return lang[1] / sum;
+        // })
 
         let lang = this.state.modal_info.repo_languages.map(lang => {
             return lang[0]
+        })
+
+        let ratio = this.state.modal_info.repo_languages.map(lang => {
+            return lang[1]
         })
 
         let zipped = _.zip(lang, ratio);
@@ -102,14 +124,6 @@ export default class Main extends React.Component {
         this.setState({
             pieData : data
         })
-    }
-
-    changeRoute() {
-        let path = `${this.props.history.location.pathname}?sort=updated`;
-        for (let key in this.condition) {
-            path += `&${key}=${this.condition[key]}`
-        }
-        this.props.history.push(path)
     }
 
     closeModal() {
@@ -291,6 +305,7 @@ export default class Main extends React.Component {
                 <Filters repos = {
                     this.state.repos
                 }
+                history={this.props.location.search}
                 />
                 <Sortings / >
                 <Cards repos = {
@@ -368,7 +383,7 @@ export default class Main extends React.Component {
                                         <p>Oops, no open PRs...</p>
                             }
                             <div>   
-                                    {this.state.pieData && this.state.pieData.datasets > 0 ? <Pie width={300} height={250} data={this.state.pieData}  ><canvas /></Pie> : null}    
+                                    {this.state.pieData && this.state.pieData.datasets.length > 0 ? <Pie width={200} height={150} data={this.state.pieData}  ><canvas /></Pie> : null}    
                             </div>    
                             </div>    
                             :
@@ -378,7 +393,7 @@ export default class Main extends React.Component {
                    
                 </Modal>    
                 <div className="main-button" >
-                    <button > load more </button>
+                    <button onClick={this.handleLoadMore.bind(this)}> load more </button>
                 </div>     
         </div>)
     }
