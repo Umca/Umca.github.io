@@ -4,8 +4,6 @@ node_js:
 before_script:
   - npm install
   - set NODE_ENV=production && webpack
-script: 
-  - set NODE_ENV=production && webpack
 deploy:
   provider: pages
   skip_cleanup: true
