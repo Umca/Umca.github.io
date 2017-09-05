@@ -3,6 +3,12 @@ node_js:
   - "8"
 before_script:
   - npm install
+  - set NODE_ENV=production && webpack
 script: 
-  - npm build
-  - webpack
+  - set NODE_ENV=production && webpack
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: cb0174619eade9c03210c1b6215f67d681479b4d
+  on:
+    branch: master
