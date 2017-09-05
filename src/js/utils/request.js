@@ -5,8 +5,6 @@ const request = {
 
         let headers = new Headers();
         headers.append('Accept', 'application/vnd.github.mercy-preview+json');
-        headers.append('Authorization', 'token ac135ea452d934ca864b7c281e3886f8902083eb');
-
         return fetch(url, {
             headers: headers
         })
@@ -21,7 +19,6 @@ const request = {
     send(url) {
         let headers = new Headers();
         headers.append('Accept', 'application/vnd.github.mercy-preview+json');
-        headers.append('Authorization', 'token ac135ea452d934ca864b7c281e3886f8902083eb');
         return fetch(url, {
             headers: headers
         })
@@ -31,7 +28,6 @@ const request = {
     sendOne(url) {
         let headers = new Headers();
         headers.append('Accept', 'application/vnd.github.mercy-preview+json');
-        headers.append('Authorization', 'token ac135ea452d934ca864b7c281e3886f8902083eb');
         return fetch(url, {
             headers: headers
         })
