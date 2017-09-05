@@ -4,6 +4,7 @@ const outputPath = path.resolve(__dirname, './dist');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 const webpackConfig = {
     entry: {
@@ -14,7 +15,7 @@ const webpackConfig = {
     },
     output: {
         path: outputPath,
-        filename: 'dist/[name].js',
+        filename: './[name].js',
         publicPath: '/'
     },
     module: {
@@ -46,6 +47,11 @@ const webpackConfig = {
         ]
     },
     plugins: [
+        new webpack.DefinePlugin({
+            'process.env': {
+                'NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+            }
+        }),
         new HtmlWebpackPlugin({
             template: path.join(__dirname, './src/index.html'),
             filename: 'index.html',
@@ -53,8 +59,9 @@ const webpackConfig = {
         }),
         new webpack.NamedModulesPlugin,
         new webpack.HotModuleReplacementPlugin(),
-        new ExtractTextPlugin('style.css'),
+        new ExtractTextPlugin('./style.css'),
         new CopyWebpackPlugin([{ from: 'src/assets', to: 'assets' }]),
+        
     ],
     devServer: {
         contentBase: path.resolve(__dirname, './dist'),
@@ -62,7 +69,19 @@ const webpackConfig = {
         historyApiFallback: true,
         hot: true,
     },
-    devtool: 'sourcemap'
+    devtool: process.env.NODE_ENV === 'production' ? 'eval' : 'sourcemap'
 }
+
+console.log(process.env.NODE_ENV)
+
+if (process.env.NODE_ENV === 'production') {
+    webpackConfig.plugins.push(
+        new webpack.optimize.UglifyJsPlugin({
+            compress: {
+                screw_ie8: true
+            }
+        })
+    )
+} 
 
 module.exports = webpackConfig;
