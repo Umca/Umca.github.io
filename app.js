@@ -93832,7 +93832,7 @@ var Main = function (_React$Component) {
                 page: this.state.page += 1
             }, function () {
                 var name = _store2.default.extract('name');
-                var type = _store2.default.extract('type');
+                var type = _store2.default.extract('checked');
                 var url = 'https://api.github.com/' + type + '/' + name + '/repos?page=' + _this2.state.page + '&per_page=30';
                 _request2.default.send(url).then(function (response) {
                     _this2.repos = _this2.repos.concat(response);
