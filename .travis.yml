@@ -9,7 +9,7 @@ cache:
   directories:
     - "node_modules"
 deploy:
-  provider: master
+  provider: pages
   skip_cleanup: true
   github_token: cb0174619eade9c03210c1b6215f67d681479b4d
   on:
